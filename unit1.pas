@@ -11,13 +11,15 @@ uses
 type
   { TForm1 }
   TForm1 = class(TForm)
-    Button1: TButton;
+    BtnSend: TButton;
+    BtnRefreshContacts: TButton;
+    ComboBoxContacts: TComboBox;
     IdTCPClient1: TIdTCPClient;  // Ensure this is declared
     IdTCPServer1: TIdTCPServer;
     MemoSend: TMemo;
     MemoReceived: TMemo;
 
-    procedure Button1Click(Sender: TObject);
+    procedure BtnSendClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure OnClientExecute(AContext: TIdContext);
@@ -51,7 +53,7 @@ begin
 
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.BtnSendClick(Sender: TObject);
 begin
     // Ensure IdTCPClient1 is properly set up
   IdTCPClient1.Host := '192.168.1.43';
