@@ -1,0 +1,48 @@
+object Form1: TForm1
+  Left = 468
+  Height = 968
+  Top = 204
+  Width = 799
+  Caption = 'Form1'
+  ClientHeight = 968
+  ClientWidth = 799
+  LCLVersion = '3.99.0.0'
+  OnClose = FormClose
+  OnCreate = FormCreate
+  object Button1: TButton
+    Left = 615
+    Height = 25
+    Top = 725
+    Width = 75
+    Caption = 'Button1'
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+  object MemoSend: TMemo
+    Left = 32
+    Height = 130
+    Top = 568
+    Width = 736
+    TabOrder = 1
+  end
+  object MemoReceived: TMemo
+    Left = 16
+    Height = 472
+    Top = 24
+    Width = 750
+    TabOrder = 2
+  end
+  object IdTCPServer1: TIdTCPServer
+    Bindings = <>
+    DefaultPort = 0
+    Left = 488
+    Top = 856
+  end
+  object IdTCPClient1: TIdTCPClient
+    ConnectTimeout = 0
+    Port = 0
+    ReadTimeout = -1
+    Left = 280
+    Top = 856
+  end
+end
