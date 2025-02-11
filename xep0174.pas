@@ -21,8 +21,9 @@ type
 
   TRoster = class
   private
-    Contacts: array of TRosterEntry;
+
   public
+    Contacts: array of TRosterEntry;
     procedure AddContact(AUsername, AHostname, AIP: string; APort: Integer);
     procedure RemoveContact(AUsername: string);
     function GetContact(AUsername: string): TRosterEntry;

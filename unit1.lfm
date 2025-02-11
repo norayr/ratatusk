@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 468
+  Left = 480
   Height = 968
-  Top = 204
+  Top = 329
   Width = 1144
   Caption = 'Form1'
   ClientHeight = 968
@@ -10,9 +10,9 @@ object Form1: TForm1
   OnClose = FormClose
   OnCreate = FormCreate
   object BtnSend: TButton
-    Left = 992
+    Left = 816
     Height = 25
-    Top = 704
+    Top = 744
     Width = 75
     Caption = 'send'
     TabOrder = 0
@@ -32,22 +32,23 @@ object Form1: TForm1
     Width = 750
     TabOrder = 2
   end
-  object ComboBoxContacts: TComboBox
-    Left = 24
-    Height = 36
-    Top = 24
-    Width = 100
-    ItemHeight = 0
-    TabOrder = 3
-    Text = 'ComboBoxContacts'
-  end
   object BtnRefreshContacts: TButton
     Left = 264
     Height = 25
-    Top = 704
+    Top = 768
     Width = 75
-    Caption = 'BtnRefreshContacts'
+    Caption = 'refresh'
+    TabOrder = 3
+    OnClick = BtnRefreshContactsClick
+  end
+  object ListBoxContacts: TListBox
+    Left = 48
+    Height = 640
+    Top = 32
+    Width = 291
+    ItemHeight = 0
     TabOrder = 4
+    TopIndex = -1
   end
   object IdTCPServer1: TIdTCPServer
     Bindings = <>
@@ -61,5 +62,17 @@ object Form1: TForm1
     ReadTimeout = -1
     Left = 280
     Top = 856
+  end
+  object IdUDPClient1: TIdUDPClient
+    Port = 0
+    Left = 628
+    Top = 872
+  end
+  object IdIPMCastServer1: TIdIPMCastServer
+    BoundPort = 0
+    MulticastGroup = '224.0.0.1'
+    Port = 0
+    Left = 145
+    Top = 834
   end
 end
