@@ -63,10 +63,16 @@ object Form1: TForm1
     Left = 280
     Top = 856
   end
-  object IdUDPServer1: TIdUDPServer
-    Bindings = <>
-    DefaultPort = 0
-    Left = 488
-    Top = 776
+  object IdUDPClient1: TIdUDPClient
+    Port = 0
+    Left = 628
+    Top = 872
+  end
+  object IdIPMCastServer1: TIdIPMCastServer
+    BoundPort = 0
+    MulticastGroup = '224.0.0.1'
+    Port = 0
+    Left = 145
+    Top = 834
   end
 end
