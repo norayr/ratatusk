@@ -18,7 +18,6 @@ type
   TForm1 = class(TForm)
     BtnSend: TButton;
     BtnRefreshContacts: TButton; // optional
-    IdUDPClient1: TIdUDPClient;
     ListBoxContacts: TListBox;
     MemoSend: TMemo;
     MemoReceived: TMemo;
@@ -69,6 +68,7 @@ begin
   config.UserName := 'inky';
   config.HostName := 'lovelace.local';
   config.Port     := 5298;
+  config.IPAddress := '192.168.1.77';
 
   FRoster := TRoster.Create;
   FRoster.AddContact('noch', 'debet.local', '192.168.1.43', 5298);
@@ -130,7 +130,6 @@ procedure TForm1.BtnRefreshContactsClick(Sender: TObject);
 var
   query: TIdBytes;
   idx: Integer;
-  UDPClient: TIdUDPClient;
 begin
   SetLength(query, 38);
   FillChar(query[0], 38, 0);
@@ -177,24 +176,24 @@ begin
   LogLine('Sending mDNS query: ' + BytesToString(query));
 
   // Now send
-  //if IdIPMCastServer1.Binding <> nil then
-  //begin
-  //  IdIPMCastServer1.Binding.SendTo(
-  //    '224.0.0.251',
-  //    5353,
-  //    query, 0, Length(query),
-  //    Id_IPv4
-  //  );
-   UDPClient := TIdUDPClient.Create(nil);
-  try
-    UDPClient.BoundIP := IdIPMCastServer1.Binding.IP;
-    UDPClient.BoundPort := 5353;
-    UDPClient.Host := '224.0.0.251'; // Multicast address
-
-    UDPClient.SendBuffer('224.0.0.251', 5353, query);
-    LogLine('Sent _presence._tcp.local PTR query via UDP');
-  finally
-    UDPClient.Free;
+  if IdIPMCastServer1.Binding <> nil then
+  begin
+    IdIPMCastServer1.Binding.SendTo(
+      '224.0.0.251',
+      5353,
+      query, 0, Length(query),
+      Id_IPv4
+    );
+   //UDPClient := TIdUDPClient.Create(nil);
+  //try
+  //  UDPClient.BoundIP := IdIPMCastServer1.Binding.IP;
+  //  UDPClient.BoundPort := 5353;
+  //  UDPClient.Host := '224.0.0.251'; // Multicast address
+  //
+   // UDPClient.SendBuffer('224.0.0.251', 5353, query);
+   // LogLine('Sent _presence._tcp.local PTR query via UDP');
+ // finally
+ //   UDPClient.Free;
     LogLine('Sent _presence._tcp.local PTR query');
   end;
 end;
@@ -215,10 +214,90 @@ begin
     LogLine('Received empty or no data');
 end;
 
+function ExtractUsername(const ServiceName: string): string;
+var
+  PosAt: Integer;
+begin
+  PosAt := Pos('@', ServiceName);
+  if PosAt > 0 then
+    Result := Copy(ServiceName, 1, PosAt - 1)
+  else
+    Result := '';
+end;
+
 procedure TForm1.OnMDNSPacket(const AData: TIdBytes; const ASourceIP: string; ASourcePort: Word);
+var
+  flags, qdCount, anCount: Word;
+  curPos: Integer;
+  i, j: Integer;
+  //name: string;
+  rType, rClass, dataLen: Word;
+  ttl: Cardinal;
+  srvPort: Word;
+  targetHost, txtData: string;
+  ipAddress: string;
 begin
   LogLine(Format('Got %d bytes from %s:%d (DNS)', [Length(AData), ASourceIP, ASourcePort]));
-  // You could parse further if you want to discover other peers' presence
+
+  if Length(AData) < 12 then Exit;
+
+  // Parse DNS header
+  flags := (AData[2] shl 8) or AData[3];
+  qdCount := (AData[4] shl 8) or AData[5];
+  anCount := (AData[6] shl 8) or AData[7];
+  curPos := 12;
+
+  // Skip questions section
+  for i := 0 to qdCount - 1 do
+  begin
+    DecodeDomainName(AData, curPos);
+    Inc(curPos, 4); // Skip type and class
+  end;
+
+  // Parse answers and additional records
+  for i := 0 to anCount + ((AData[8] shl 8) or AData[9]) - 1 do // Include additional
+  begin
+    name := DecodeDomainName(AData, curPos);
+    if curPos + 10 > Length(AData) then Break;
+
+    rType := (AData[curPos] shl 8) or AData[curPos+1];
+    rClass := (AData[curPos+2] shl 8) or AData[curPos+3];
+    ttl := (AData[curPos+4] shl 24) or (AData[curPos+5] shl 16) or
+           (AData[curPos+6] shl 8) or AData[curPos+7];
+    dataLen := (AData[curPos+8] shl 8) or AData[curPos+9];
+    Inc(curPos, 10);
+
+    // Check if it's a PTR record for "_presence._tcp.local"
+    if (rType = $000C) and (name = '_presence._tcp.local') then
+    begin
+      // PTR points to the service instance name
+      name := DecodeDomainName(AData, curPos);
+    end
+    // Check for SRV record
+    else if (rType = $0021) then
+    begin
+      // Skip priority, weight
+      Inc(curPos, 4);
+      srvPort := (AData[curPos] shl 8) or AData[curPos+1];
+      Inc(curPos, 2);
+      targetHost := DecodeDomainName(AData, curPos);
+      // Add to roster
+      FRoster.AddContact(ExtractUsername(name), targetHost, '', srvPort);
+      UpdateListBox;
+    end
+    // Check for A record
+    else if (rType = $0001) and (dataLen = 4) then
+    begin
+      ipAddress := Format('%d.%d.%d.%d', [AData[curPos], AData[curPos+1], AData[curPos+2], AData[curPos+3]]);
+      // Update the contact's IP if targetHost matches
+      for j := 0 to High(FRoster.Contacts) do
+        if FRoster.Contacts[j].Hostname = name then
+          FRoster.Contacts[j].IP := ipAddress;
+      UpdateListBox;
+    end;
+
+    Inc(curPos, dataLen);
+  end;
 end;
 
 procedure TForm1.LogLine(const S: string);

@@ -70,9 +70,4 @@ object Form1: TForm1
     Left = 145
     Top = 834
   end
-  object IdUDPClient1: TIdUDPClient
-    Port = 0
-    Left = 640
-    Top = 864
-  end
 end

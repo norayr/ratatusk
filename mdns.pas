@@ -13,6 +13,7 @@ type
     UserName: string;   // e.g. "inky"
     HostName: string;   // e.g. "lovelace.local"
     Port: Word;         // e.g. 5298
+    IPAddress: string;
   end;
 
   { Event signature for receiving any inbound DNS packets (after we parse them) }
@@ -157,91 +158,104 @@ end;
 
 {------------------------------------------------------------------------------}
 function BuildMDNSResponse(const AConfig: TMDNSConfig): TIdBytes;
-{ Minimal DNS response advertising "UserName@HostName._presence._tcp.local" at Port }
 var
   ms: TMemoryStream;
   dataLenPos: Int64;
   startPos: Int64;
   dataLen: Integer;
-
-  // Construct the "ServiceName"
-  // e.g. "inky@lovelace._presence._tcp.local"
   userService: string;
-  // The "HostName" might be "lovelace.local"
-  // i.e. the host used in the SRV record's target
-
   txtLine: string;
   txtLenByte: Byte;
+  ipParts: TStringList;
+  i: Integer;
+  b: Byte;
 begin
   userService := AConfig.UserName + '@' + AConfig.HostName + '._presence._tcp.local';
 
   ms := TMemoryStream.Create;
   try
     // DNS Header
-    // ID=0, Flags=0x8400 => (QR=1, AA=1), QDCount=0, ANCount=3, NSCount=0, ARCount=0
     WriteWordBE(ms, 0);       // Transaction ID
-    WriteWordBE(ms, $8400);   // Flags => QR=1, AA=1
+    WriteWordBE(ms, $8400);   // Flags: QR=1, AA=1
     WriteWordBE(ms, 0);       // QDCount=0
-    WriteWordBE(ms, 3);       // ANCount=3
+    WriteWordBE(ms, 3);       // ANCount=3 (PTR, SRV, TXT)
     WriteWordBE(ms, 0);       // NSCount=0
-    WriteWordBE(ms, 0);       // ARCount=0
+    WriteWordBE(ms, 1);       // ARCount=1 (A record)
 
-    // 1) PTR Record => "_presence._tcp.local" -> userService
+    // 1) PTR Record
     EncodeDomainName(ms, '_presence._tcp.local');
-    WriteWordBE(ms, $000C);   // TYPE=PTR
+    WriteWordBE(ms, $000C);   // TYPE=PTR (0x000C)
     WriteWordBE(ms, $0001);   // CLASS=IN
     WriteLongWordBE(ms, 120); // TTL=120
     dataLenPos := ms.Position;
-    WriteWordBE(ms, 0);       // placeholder for RDLENGTH
+    WriteWordBE(ms, 0);       // RDLENGTH placeholder
     startPos := ms.Position;
-
-    EncodeDomainName(ms, userService); // points to "inky@lovelace._presence._tcp.local"
-
+    EncodeDomainName(ms, userService); // e.g., "inky@lovelace._presence..."
     dataLen := ms.Position - startPos;
     ms.Seek(dataLenPos, soFromBeginning);
     WriteWordBE(ms, dataLen);
     ms.Seek(0, soFromEnd);
 
-    // 2) SRV Record => userService => port = AConfig.Port => target = AConfig.HostName
+    // 2) SRV Record
     EncodeDomainName(ms, userService);
     WriteWordBE(ms, $0021);   // TYPE=SRV
     WriteWordBE(ms, $0001);   // CLASS=IN
     WriteLongWordBE(ms, 120); // TTL=120
     dataLenPos := ms.Position;
-    WriteWordBE(ms, 0);       // placeholder
+    WriteWordBE(ms, 0);       // RDLENGTH placeholder
     startPos := ms.Position;
-
-    // priority=0, weight=0, port=?
-    WriteWordBE(ms, 0);
-    WriteWordBE(ms, 0);
-    WriteWordBE(ms, AConfig.Port);
-    EncodeDomainName(ms, AConfig.HostName);
-
+    WriteWordBE(ms, 0);       // Priority=0
+    WriteWordBE(ms, 0);       // Weight=0
+    WriteWordBE(ms, AConfig.Port); // Port
+    EncodeDomainName(ms, AConfig.HostName); // Target host (e.g., "lovelace.local")
     dataLen := ms.Position - startPos;
     ms.Seek(dataLenPos, soFromBeginning);
     WriteWordBE(ms, dataLen);
     ms.Seek(0, soFromEnd);
 
-    // 3) TXT Record => userService => "txtvers=1" or anything
+    // 3) TXT Record
     EncodeDomainName(ms, userService);
     WriteWordBE(ms, $0010);   // TYPE=TXT
     WriteWordBE(ms, $0001);   // CLASS=IN
     WriteLongWordBE(ms, 120);
     dataLenPos := ms.Position;
-    WriteWordBE(ms, 0);  // placeholder
+    WriteWordBE(ms, 0);       // RDLENGTH placeholder
     startPos := ms.Position;
-
     txtLine := 'txtvers=1';
     txtLenByte := Length(txtLine);
     ms.Write(txtLenByte, 1);
     ms.Write(PChar(txtLine)^, txtLenByte);
-
     dataLen := ms.Position - startPos;
     ms.Seek(dataLenPos, soFromBeginning);
     WriteWordBE(ms, dataLen);
     ms.Seek(0, soFromEnd);
 
-    // Convert to TIdBytes
+    // 4) A Record (Additional)
+    EncodeDomainName(ms, AConfig.HostName);
+    WriteWordBE(ms, $0001);   // TYPE=A
+    WriteWordBE(ms, $0001);   // CLASS=IN
+    WriteLongWordBE(ms, 120); // TTL=120
+    dataLenPos := ms.Position;
+    WriteWordBE(ms, 0);       // RDLENGTH placeholder
+    startPos := ms.Position;
+    // Write IP bytes (e.g., 192.168.1.43 → 4 bytes)
+    ipParts := TStringList.Create;
+    try
+      ipParts.Delimiter := '.';
+      ipParts.DelimitedText := AConfig.IPAddress;
+      for i := 0 to 3 do begin
+        b := StrToInt(ipParts[i]);
+        ms.Write(b, 1);
+      end;
+    finally
+      ipParts.Free;
+    end;
+    dataLen := ms.Position - startPos;
+    ms.Seek(dataLenPos, soFromBeginning);
+    WriteWordBE(ms, dataLen);
+    ms.Seek(0, soFromEnd);
+
+    // Finalize
     SetLength(Result, ms.Size);
     ms.Position := 0;
     ms.Read(Result[0], ms.Size);
