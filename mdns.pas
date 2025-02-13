@@ -30,7 +30,7 @@ type
     FPacketIP: string;
     FPacketPort: Word;
 
-    procedure HandleMDNSQuery(const AData: TIdBytes; const AFromIP: string; AFromPort: Word);
+    procedure HandleMDNSQuery(const AData: TIdBytes);
     procedure CallOnPacket;
   protected
     procedure Execute; override;
@@ -50,10 +50,16 @@ function DecodeDomainName(const AData: TIdBytes; var StartPos: Integer): string;
 { Utility for writing a domain name into a TMemoryStream in DNS label form }
 procedure EncodeDomainName(Stream: TMemoryStream; const DomainName: string);
 
+
 implementation
 
 uses
   IdSocketHandle;
+procedure LogLine(const s: string);
+begin
+  writeln(s);
+
+end;
 
 {------------------------------------------------------------------------------}
 function CopyStr(const AData: TIdBytes; StartPos, Len: Integer): string;
@@ -264,7 +270,8 @@ begin
 end;
 
 {------------------------------------------------------------------------------}
-procedure TMDNSResponderThread.HandleMDNSQuery(const AData: TIdBytes; const AFromIP: string; AFromPort: Word);
+
+procedure TMDNSResponderThread.HandleMDNSQuery(const AData: TIdBytes);
 var
   flags, qdCount: Word;
   curPos: Integer;
@@ -274,6 +281,9 @@ var
   response: TIdBytes;
 begin
   if Length(AData) < 12 then Exit;
+
+  // Log the incoming query
+  LogLine('Received mDNS query: ' + BytesToString(AData));
 
   // parse header
   flags := (AData[2] shl 8) or AData[3];
@@ -305,6 +315,9 @@ begin
     // Build response from the config
     response := BuildMDNSResponse(FConfig);
 
+    // Log the outgoing response
+    LogLine('Sending mDNS response: ' + BytesToString(response));
+
     if Assigned(FServer.Binding) then
       FServer.Binding.SendTo('224.0.0.251', 5353, response, 0, Length(response), Id_IPv4);
   end;
@@ -319,6 +332,7 @@ var
   peerPort: Word;
   ipVer: TIdIPVersion;
 begin
+  LogLine('MDNS Responder Thread started');
   while not Terminated do
   begin
     if (FServer <> nil) and (FServer.Binding <> nil) then
@@ -328,13 +342,15 @@ begin
       peerPort := 0;
       ipVer := Id_IPv4;
 
+      SetLength(buf, 4096);
       bytesRead := FServer.Binding.RecvFrom(buf, peerIP, peerPort, ipVer);
       if bytesRead > 0 then
       begin
+        LogLine('Received ' + IntToStr(bytesRead) + ' bytes from ' + peerIP);
         SetLength(buf, bytesRead);
 
         // 1) Possibly respond if it's a presence query
-        HandleMDNSQuery(buf, peerIP, peerPort);
+        HandleMDNSQuery(buf);
 
         // 2) If we have an event, pass data to main thread
         if Assigned(FOnPacket) then
@@ -351,6 +367,7 @@ begin
     end;
     Sleep(10);
   end;
+  LogLine('MDNS Responder Thread terminated');
 end;
 
 end.

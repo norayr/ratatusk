@@ -9,7 +9,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
         <CursorPos X="24" Y="13"/>
-        <UsageCount Value="67"/>
+        <UsageCount Value="72"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -19,19 +19,18 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="118"/>
-        <CursorPos X="29" Y="132"/>
-        <UsageCount Value="67"/>
+        <TopLine Value="162"/>
+        <CursorPos X="12" Y="177"/>
+        <UsageCount Value="72"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="xep0174.pas"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="8"/>
-        <CursorPos X="2" Y="31"/>
-        <UsageCount Value="33"/>
+        <TopLine Value="74"/>
+        <CursorPos Y="99"/>
+        <UsageCount Value="35"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -39,14 +38,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="494"/>
         <CursorPos X="10" Y="514"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="../../laz/components-3.4/Indy/Lib/System/IdStack.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="952"/>
         <CursorPos Y="980"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
@@ -54,14 +53,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="58"/>
         <CursorPos Y="86"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="../../laz/components-3.4/Indy/Lib/Core/IdIPMCastServer.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="180"/>
         <CursorPos X="17" Y="184"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
@@ -69,7 +68,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="217"/>
         <CursorPos X="5" Y="256"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
@@ -77,21 +76,21 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="3995"/>
         <CursorPos X="21" Y="4009"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="../../laz/lazarus-3.4/lcl/include/buttoncontrol.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2"/>
         <CursorPos Y="22"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="../../laz/lazarus-3.4/lcl/include/buttons.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="150"/>
         <CursorPos Y="170"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="../../laz/components-3.4/Indy/Lib/Core/IdSocketHandle.pas"/>
@@ -99,139 +98,140 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="284"/>
         <CursorPos X="27" Y="323"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="mdns.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="332"/>
-        <CursorPos Y="357"/>
-        <UsageCount Value="25"/>
+        <TopLine Value="340"/>
+        <CursorPos X="28" Y="353"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="18" Column="18"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="535" Column="16" TopLine="521"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="269" Column="5" TopLine="231"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="124" Column="79" TopLine="101"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="28" Column="24" TopLine="122"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="325" Column="56" TopLine="309"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="341" Column="34" TopLine="321"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="352" Column="25" TopLine="320"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="398" Column="35" TopLine="366"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="606" Column="11" TopLine="568"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="48" Column="70" TopLine="32"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="77" Column="26" TopLine="62"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="606" Column="24" TopLine="589"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="575" Column="26" TopLine="553"/>
-      </Position>
-      <Position>
         <Filename Value="mdns.pas"/>
-        <Caret Line="340" TopLine="301"/>
-      </Position>
-      <Position>
-        <Filename Value="mdns.pas"/>
-        <Caret Line="39" Column="6" TopLine="16"/>
-      </Position>
-      <Position>
-        <Filename Value="mdns.pas"/>
-        <Caret Line="42" Column="14" TopLine="16"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="73" Column="19" TopLine="62"/>
-      </Position>
-      <Position>
-        <Filename Value="mdns.pas"/>
-        <Caret Line="35" Column="25" TopLine="16"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="12" Column="10"/>
-      </Position>
-      <Position>
-        <Filename Value="mdns.pas"/>
-        <Caret Line="348" Column="13" TopLine="333"/>
-      </Position>
-      <Position>
-        <Filename Value="project1.lpr"/>
-        <Caret Line="13" Column="24"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="29" Column="4" TopLine="7"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="12" Column="15" TopLine="7"/>
-      </Position>
-      <Position>
-        <Filename Value="mdns.pas"/>
-        <Caret Line="337" Column="8" TopLine="333"/>
+        <Caret Line="283" Column="5" TopLine="272"/>
       </Position>
       <Position>
         <Filename Value="xep0174.pas"/>
-        <Caret Line="60" Column="15" TopLine="59"/>
+        <Caret Line="12" Column="11" TopLine="8"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="184" Column="10" TopLine="90"/>
+        <Caret Line="217" TopLine="192"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="27" Column="25" TopLine="14"/>
+        <Caret Line="218" TopLine="193"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="59" Column="38" TopLine="39"/>
+        <Caret Line="196" Column="54" TopLine="177"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="32" Column="15" TopLine="16"/>
+        <Caret Line="191" Column="47" TopLine="179"/>
+      </Position>
+      <Position>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="188" Column="13" TopLine="180"/>
+      </Position>
+      <Position>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="28" Column="25" TopLine="15"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="350" Column="6" TopLine="345"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="22" Column="23" TopLine="9"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="368" Column="47" TopLine="347"/>
+      </Position>
+      <Position>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="90" Column="20" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="unit1.pas"/>
+        <Caret Line="88" Column="35" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="355" Column="14" TopLine="347"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="48" Column="26" TopLine="35"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="76" Column="17" TopLine="56"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="33" Column="30" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="267" Column="12" TopLine="258"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="344" Column="7" TopLine="324"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="314" Column="7" TopLine="301"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="374" TopLine="349"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="316" Column="45" TopLine="304"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="323" Column="43" TopLine="309"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="321" Column="17" TopLine="309"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="322" Column="7" TopLine="103"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="33" Column="30" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="274" Column="26" TopLine="16"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="316" Column="35" TopLine="303"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="273" TopLine="266"/>
+      </Position>
+      <Position>
+        <Filename Value="mdns.pas"/>
+        <Caret Line="32" TopLine="16"/>
       </Position>
     </JumpHistory>
     <RunParams>

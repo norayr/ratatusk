@@ -39,6 +39,7 @@ object Form1: TForm1
     Width = 75
     Caption = 'refresh'
     TabOrder = 3
+    OnClick = BtnRefreshContactsClick
   end
   object ListBoxContacts: TListBox
     Left = 48
@@ -68,5 +69,10 @@ object Form1: TForm1
     Port = 0
     Left = 145
     Top = 834
+  end
+  object IdUDPClient1: TIdUDPClient
+    Port = 0
+    Left = 640
+    Top = 864
   end
 end

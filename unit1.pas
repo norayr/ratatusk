@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   IdTCPClient, IdTCPServer, IdContext,
-  IdIPMCastServer, IdGlobal,
+  IdIPMCastServer, IdUDPClient, IdGlobal,
   xep0174,
   mdns;
 
@@ -18,6 +18,7 @@ type
   TForm1 = class(TForm)
     BtnSend: TButton;
     BtnRefreshContacts: TButton; // optional
+    IdUDPClient1: TIdUDPClient;
     ListBoxContacts: TListBox;
     MemoSend: TMemo;
     MemoReceived: TMemo;
@@ -48,6 +49,7 @@ implementation
 uses
   IdUDPBase; // if you want to manually send queries in BtnRefreshContactsClick
 
+
 procedure TForm1.UpdateListBox;
 var
   i: Integer;
@@ -56,6 +58,7 @@ begin
   for i := 0 to High(FRoster.Contacts) do
     ListBoxContacts.Items.Add(FRoster.Contacts[i].Username);
 end;
+
 
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -78,6 +81,7 @@ begin
   IdTCPServer1.Active := True;
 
   // Set up the IP multicast server (for mDNS)
+  IdIPMCastServer1.Binding.IP := '0.0.0.0';
   IdIPMCastServer1.Active := False;
   IdIPMCastServer1.BoundPort := 5353;
   IdIPMCastServer1.MulticastGroup := '224.0.0.251';
@@ -123,15 +127,14 @@ begin
 end;
 
 procedure TForm1.BtnRefreshContactsClick(Sender: TObject);
-{ Optional: manually broadcast a "who's out there?" _presence._tcp.local query. }
 var
   query: TIdBytes;
   idx: Integer;
+  UDPClient: TIdUDPClient;
 begin
   SetLength(query, 38);
   FillChar(query[0], 38, 0);
   // Basic DNS query: QDCount=1, Q= _presence._tcp.local, Type=PTR(12), Class=IN(1)
-  // This is just an example. Real code might be same as in your old "DiscoverMDNSClients."
   query[0] := 0; // TxID=0
   query[1] := 0;
   query[2] := 0; // Flags=0
@@ -170,15 +173,28 @@ begin
   query[idx+1] := 1;
   Inc(idx,2);
 
+  // Log the query
+  LogLine('Sending mDNS query: ' + BytesToString(query));
+
   // Now send
-  if IdIPMCastServer1.Binding <> nil then
-  begin
-    IdIPMCastServer1.Binding.SendTo(
-      '224.0.0.251',
-      5353,
-      query, 0, Length(query),
-      Id_IPv4
-    );
+  //if IdIPMCastServer1.Binding <> nil then
+  //begin
+  //  IdIPMCastServer1.Binding.SendTo(
+  //    '224.0.0.251',
+  //    5353,
+  //    query, 0, Length(query),
+  //    Id_IPv4
+  //  );
+   UDPClient := TIdUDPClient.Create(nil);
+  try
+    UDPClient.BoundIP := IdIPMCastServer1.Binding.IP;
+    UDPClient.BoundPort := 5353;
+    UDPClient.Host := '224.0.0.251'; // Multicast address
+
+    UDPClient.SendBuffer('224.0.0.251', 5353, query);
+    LogLine('Sent _presence._tcp.local PTR query via UDP');
+  finally
+    UDPClient.Free;
     LogLine('Sent _presence._tcp.local PTR query');
   end;
 end;
