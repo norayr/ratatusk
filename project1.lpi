@@ -57,7 +57,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="/usr/lib/fpc/3.2.2/source/packages/fcl-net/src/"/>
+      <OtherUnitFiles Value="/usr/lib/fpc/3.2.2/source/packages/fcl-net/src/;mdns4Delphi"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

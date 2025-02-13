@@ -1,5 +1,5 @@
 object Form1: TForm1
-  Left = 239
+  Left = 324
   Height = 968
   Top = 288
   Width = 1144
@@ -32,22 +32,13 @@ object Form1: TForm1
     Width = 750
     TabOrder = 2
   end
-  object BtnRefreshContacts: TButton
-    Left = 264
-    Height = 25
-    Top = 768
-    Width = 75
-    Caption = 'refresh'
-    TabOrder = 3
-    OnClick = BtnRefreshContactsClick
-  end
   object ListBoxContacts: TListBox
     Left = 48
     Height = 640
     Top = 32
     Width = 291
     ItemHeight = 0
-    TabOrder = 4
+    TabOrder = 3
     TopIndex = -1
   end
   object IdTCPServer1: TIdTCPServer
@@ -62,12 +53,5 @@ object Form1: TForm1
     ReadTimeout = -1
     Left = 280
     Top = 856
-  end
-  object IdIPMCastServer1: TIdIPMCastServer
-    BoundPort = 0
-    MulticastGroup = '224.0.0.1'
-    Port = 0
-    Left = 145
-    Top = 834
   end
 end
