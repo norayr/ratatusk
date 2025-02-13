@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 580
+  Left = 239
   Height = 968
-  Top = 270
+  Top = 288
   Width = 1144
   Caption = 'Form1'
   ClientHeight = 968
@@ -61,11 +61,6 @@ object Form1: TForm1
     ReadTimeout = -1
     Left = 280
     Top = 856
-  end
-  object IdUDPClient1: TIdUDPClient
-    Port = 0
-    Left = 628
-    Top = 872
   end
   object IdIPMCastServer1: TIdIPMCastServer
     BoundPort = 0

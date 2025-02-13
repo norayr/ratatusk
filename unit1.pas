@@ -29,8 +29,10 @@ type
     procedure BtnSendClick(Sender: TObject);
     procedure BtnRefreshContactsClick(Sender: TObject);
     procedure OnClientExecute(AContext: TIdContext);
+    procedure UpdateListBox;
   private
     FMDNSThread: TMDNSResponderThread;
+    FRoster: TRoster;
     procedure OnMDNSPacket(const AData: TIdBytes; const ASourceIP: string; ASourcePort: Word);
     procedure LogLine(const S: string);
   public
@@ -46,6 +48,16 @@ implementation
 uses
   IdUDPBase; // if you want to manually send queries in BtnRefreshContactsClick
 
+procedure TForm1.UpdateListBox;
+var
+  i: Integer;
+begin
+  ListBoxContacts.Items.Clear;
+  for i := 0 to High(FRoster.Contacts) do
+    ListBoxContacts.Items.Add(FRoster.Contacts[i].Username);
+end;
+
+
 procedure TForm1.FormCreate(Sender: TObject);
 var
   config: TMDNSConfig;
@@ -54,6 +66,11 @@ begin
   config.UserName := 'inky';
   config.HostName := 'lovelace.local';
   config.Port     := 5298;
+
+  FRoster := TRoster.Create;
+  FRoster.AddContact('noch', 'debet.local', '192.168.1.43', 5298);
+  UpdateListbox;
+
 
   // Start TCP server for inbound chat
   IdTCPServer1.DefaultPort := config.Port;
@@ -112,6 +129,7 @@ var
   idx: Integer;
 begin
   SetLength(query, 38);
+  FillChar(query[0], 38, 0);
   // Basic DNS query: QDCount=1, Q= _presence._tcp.local, Type=PTR(12), Class=IN(1)
   // This is just an example. Real code might be same as in your old "DiscoverMDNSClients."
   query[0] := 0; // TxID=0
